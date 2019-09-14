@@ -21,3 +21,10 @@ You can now use `Gif` in your project, after you include the header:
 You can also use this repository as a standalone project and run it directly on the robot.
 Build by running `prosv5 make`.
 There is an example program in `src/initialize.cpp`.
+
+# Use
+After you have included the header file, run 
+```cpp
+Gif gif("/usd/mygif.gif", 120, 0 );
+```
+Note the `/usd/` prefix, which is used in PROS to signify the SD card.
