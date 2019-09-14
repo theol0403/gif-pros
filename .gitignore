@@ -1,0 +1,46 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.elf
+*.bin
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+# *.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.bin
+
+# PROS FILES
+*.log
+bin/output.elf
+*.bin
+bin/output.bin
+bin/_pros_ld_timestamp.o
+*.ini
+compile_commands.json
+desktop.ini
+.vscode/*
