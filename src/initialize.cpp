@@ -8,7 +8,7 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	vex::Gif gif("/usd/world.gif", 120, 0 );
+	Gif gif("/usd/world.gif", 120, 0 );
 }
 
 /**
