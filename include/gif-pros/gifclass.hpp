@@ -17,6 +17,8 @@ private:
   void   *_gifmem;
   void   *_buffer;
 
+  pros::task_t _task;
+
   static void render(void *arg );
 
 };

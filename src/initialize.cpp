@@ -1,5 +1,4 @@
 #include "main.h"
-#include "gif-pros/gifclass.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
