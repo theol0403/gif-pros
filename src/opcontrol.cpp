@@ -14,6 +14,9 @@
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+
+	Gif gif("/usd/world.gif", 120, 0 );
+
 	while (true) {
 		pros::delay(20);
 	}
