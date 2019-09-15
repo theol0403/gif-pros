@@ -1,6 +1,12 @@
 #include "gifclass.hpp"
 
 
+extern "C" {
+	void vexDisplayCopyRect( int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t *pSrc, int32_t srcStride );
+}
+
+
+
 Gif::Gif( const char *fname, int sx, int sy ) {
 	_sx = sx;
 	_sy = sy;
@@ -35,7 +41,7 @@ Gif::Gif( const char *fname, int sx, int sy ) {
 			}
 
 			// memory for rendering frame
-			_buffer = (uint32_t *)malloc(_gif->width * _gif->height * sizeof(uint32_t));
+			_buffer = (uint32_t*)malloc(_gif->width * _gif->height * sizeof(uint32_t));
 			if( _buffer == NULL ) {
 				// out of memory
 				gd_close_gif( _gif );
@@ -43,7 +49,7 @@ Gif::Gif( const char *fname, int sx, int sy ) {
 				std::cerr << "Gif::Gif - not enough memory for frame buffer";
 			} else {
 				// create thread to handle this gif
-				_task = pros::c::task_create( render, static_cast<void *>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
+				_task = pros::c::task_create( render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
 			}
 		}
 	}
@@ -57,13 +63,6 @@ Gif::~Gif() {
 	gd_close_gif( _gif );
 	free(_gifmem);
 }
-
-
-extern "C" {
-	void vexDisplayCopyRect( int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t *pSrc, int32_t srcStride );
-}
-
-// static void copy_rect
 
 
 void Gif::render(void *arg ) {
@@ -105,4 +104,12 @@ void Gif::render(void *arg ) {
 	free(instance->_buffer);
 	gd_close_gif(gif);
 	free(instance->_gifmem);
+}
+
+
+void Gif::render_task(void *arg) {
+	while(true) {
+		Gif::render(arg);
+		pros::c::delay(2);
+	}
 }

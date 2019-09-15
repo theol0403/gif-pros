@@ -19,6 +19,7 @@ private:
 
   pros::task_t _task;
 
-  static void render(void *arg );
+  static void render(void *arg);
+  static void render_task(void *arg);
 
 };
