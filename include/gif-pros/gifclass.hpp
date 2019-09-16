@@ -7,7 +7,7 @@ class Gif {
 
 public:
 
-  Gif( const char *fname, int sx, int sy );
+  Gif( const char *fname, lv_obj_t* parent, int sx, int sy );
   ~Gif();
 
 private:

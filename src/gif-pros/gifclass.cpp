@@ -7,7 +7,7 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 
 	if( fp != NULL ) {
 		fseek(fp, 0, SEEK_END);
-		size_tlen = ftell(fp);
+		size_t len = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 
 		_gifmem = malloc(len);
@@ -94,7 +94,7 @@ void Gif::_render(void *arg ) {
 	}
 
   //destruct object and free memory
-	~GIF::GIF();
+	instance->~Gif();
 }
 
 
