@@ -78,6 +78,7 @@ void Gif::_render(void *arg ) {
 			int32_t now = pros::millis();
 
 			gd_render_frame(gif, (uint8_t*)instance->_buffer);
+
 			lv_canvas_copy_buf(instance->_canvas, instance->_buffer, instance->_sx, instance->_sy, gif->width-1, gif->height-1);
 
 			int32_t delay = gif->gce.delay * 10;
@@ -88,7 +89,7 @@ void Gif::_render(void *arg ) {
 			if(delay > 0) pros::delay(delay);
 		}
 
-		if (looped >= gif->loop_count) break;
+		if (looped == gif->loop_count) break;
 
 		gd_rewind(gif);
 	}
