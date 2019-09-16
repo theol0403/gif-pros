@@ -17,9 +17,12 @@ private:
   void   *_gifmem;
   void   *_buffer;
 
+  lv_color_t *_cbuf;
+  lv_obj_t *_canvas;
+
   pros::task_t _task;
 
-  static void render(void *arg);
-  static void render_task(void *arg);
+  static void _render(void *arg);
+  static void _render_task(void *arg);
 
 };
