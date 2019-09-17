@@ -33,7 +33,7 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 			}
 
 			// memory for rendering frame
-			_buffer = (uint32_t*)malloc(_gif->width * _gif->height * sizeof(uint32_t));
+			_buffer = (uint8_t*)malloc(_gif->width * _gif->height * sizeof(uint8_t));
 			if(_buffer == NULL) {
 				// out of memory
 				gd_close_gif(_gif);
@@ -41,14 +41,15 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 				std::cerr << "Gif::Gif - not enough memory for frame buffer" << std::endl;
 			} else {
 				_cbuf = new lv_color_t[_gif->width * _gif->height];
-				_canvas = lv_canvas_create(parent, NULL);
-				lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR);
-				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
-			}
-		}
-	} else {
-		std::cerr << "Gif::Gif - unable to open gif (file not found)" << std::endl;
-	}
+        _convertbuf = new lv_color_t[_gif->width * _gif->height];
+        _canvas = lv_canvas_create(parent, NULL);
+        lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR);
+        _task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
+      }
+    }
+  } else {
+    std::cerr << "Gif::Gif - unable to open gif (file not found)" << std::endl;
+  }
 
 };
 
@@ -79,23 +80,31 @@ void Gif::_render(void *arg ) {
 
 			gd_render_frame(gif, (uint8_t*)instance->_buffer);
 
-			lv_canvas_copy_buf(instance->_canvas, instance->_buffer, instance->_sx, instance->_sy, gif->width-1, gif->height-1);
+      for (int i = 0; i < gif->height * gif->width; i++) {
+        instance->_convertbuf[i].blue = ((uint8_t*)instance->_buffer)[(i * 4)];
+        instance->_convertbuf[i].green = ((uint8_t*)instance->_buffer)[(i * 4) + 1];
+        instance->_convertbuf[i].red = ((uint8_t*)instance->_buffer)[(i * 4) + 2];
+        instance->_convertbuf[i].alpha = ((uint8_t*)instance->_buffer)[(i * 4) + 3];
+      };
 
-			int32_t delay = gif->gce.delay * 10;
+      lv_canvas_set_buffer(instance->_canvas, instance->_convertbuf, gif->width, gif->height, LV_IMG_CF_TRUE_COLOR);
+      // lv_canvas_copy_buf(instance->_canvas, instance->_convertbuf, instance->_sx, instance->_sy, gif->width-1, gif->height-1);
 
-			int32_t delta = pros::millis() - now;
-			delay -= delta;
-			
-			if(delay > 0) pros::delay(delay);
-		}
+      int32_t delay = gif->gce.delay * 10;
 
-		if (looped == gif->loop_count) break;
+      int32_t delta = pros::millis() - now;
+      delay -= delta;
 
-		gd_rewind(gif);
-	}
+      if(delay > 0) pros::delay(delay);
+    }
+
+    if (looped == gif->loop_count) break;
+
+    gd_rewind(gif);
+  }
 
   //destruct object and free memory
-	instance->~Gif();
+  instance->~Gif();
 }
 
 

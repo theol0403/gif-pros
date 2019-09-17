@@ -18,6 +18,7 @@ private:
   void   *_buffer;
 
   lv_color_t *_cbuf;
+  lv_color_t *_convertbuf;
   lv_obj_t *_canvas;
 
   pros::task_t _task;

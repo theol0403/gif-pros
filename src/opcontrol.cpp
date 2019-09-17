@@ -16,7 +16,7 @@
  */
 void opcontrol() {
 
-	Gif gif("/usd/world.gif", lv_scr_act(), 0, 0 );
+	Gif gif("/usd/earth.gif", lv_scr_act(), 0, 0 );
 
 	while (true) {
 		pros::delay(20);
