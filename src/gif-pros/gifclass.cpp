@@ -40,8 +40,8 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 				free(_gifmem);
 				std::cerr << "Gif::Gif - not enough memory for frame buffer" << std::endl;
 			} else {
-				_cbuf = new lv_color_t[_gif->width * _gif->height];
-        _convertbuf = new lv_color_t[_gif->width * _gif->height];
+				_cbuf = (lv_color_t*)malloc(_gif->width * _gif->height * sizeof(lv_color_t));
+        _convertbuf = (lv_color_t*)malloc(_gif->width * _gif->height * sizeof(lv_color_t));
         _canvas = lv_canvas_create(parent, NULL);
         lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR);
         _task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
@@ -87,8 +87,9 @@ void Gif::_render(void *arg ) {
         instance->_convertbuf[i].alpha = ((uint8_t*)instance->_buffer)[(i * 4) + 3];
       };
 
-      lv_canvas_set_buffer(instance->_canvas, instance->_convertbuf, gif->width, gif->height, LV_IMG_CF_TRUE_COLOR);
-      // lv_canvas_copy_buf(instance->_canvas, instance->_convertbuf, instance->_sx, instance->_sy, gif->width-1, gif->height-1);
+      // lv_canvas_set_buffer(instance->_canvas, instance->_convertbuf, gif->width, gif->height, LV_IMG_CF_TRUE_COLOR);
+      // lv_canvas_copy_buf(instance->_canvas, instance->_convertbuf, instance->_sx, instance->_sy, gif->width, gif->height);
+      lv_obj_invalidate(instance->_canvas);
 
       int32_t delay = gif->gce.delay * 10;
 
