@@ -33,17 +33,16 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 			}
 
 			// memory for rendering frame
-			_buffer = (uint8_t*)malloc(_gif->width * _gif->height * sizeof(uint32_t));
+			_buffer = (uint8_t*)malloc(_gif->width * _gif->height * BYTES_PER_PIXEL);
 			if(_buffer == NULL) {
 				// out of memory
 				gd_close_gif(_gif);
 				free(_gifmem);
 				std::cerr << "Gif::Gif - not enough memory for frame buffer" << std::endl;
 			} else {
-				_cbuf = (lv_color_t*)malloc(_gif->width * _gif->height * sizeof(lv_color_t));
-				_convertbuf = (lv_color_t*)malloc(_gif->width * _gif->height * sizeof(lv_color_t));
+				_cbuf = new lv_color_t[_gif->width * _gif->height];
 				_canvas = lv_canvas_create(parent, NULL);
-				lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR);
+				lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
 				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
 			}
 		}
@@ -55,65 +54,59 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 
 
 Gif::~Gif() {
+	_cleanup();
+}
+
+
+void Gif::_cleanup() {
 	pros::c::task_delete(_task);
 	lv_obj_del(_canvas);
-	free(_convertbuf);
-	free(_cbuf);
+	delete[] _cbuf;
 	free(_buffer);
 	gd_close_gif( _gif );
 	free(_gifmem);
 }
 
 
-void Gif::_render(void *arg ) {
-	if( arg == NULL) {
-		std::cerr << "Gif::_render - arg is NULL" << std::endl;
-		return;
-	}
-
-	Gif *instance = static_cast<Gif*>(arg);
-
-	gd_GIF *gif = instance->_gif;
+void Gif::_render() {
 
 	for (unsigned looped = 1;; looped++) {
-		while (gd_get_frame(gif)) {
+		while (gd_get_frame(_gif)) {
 			int32_t now = pros::millis();
 
-			gd_render_frame(gif, (uint8_t*)instance->_buffer);
+			gd_render_frame(_gif, _buffer);
 
-			for (size_t i = 0; i < gif->height * gif->width; i++) {
-				instance->_convertbuf[i].red = ((uint8_t*)instance->_buffer)[(i * 4)];
-				instance->_convertbuf[i].green = ((uint8_t*)instance->_buffer)[(i * 4) + 1];
-				instance->_convertbuf[i].blue = ((uint8_t*)instance->_buffer)[(i * 4) + 2];
-				instance->_convertbuf[i].alpha = ((uint8_t*)instance->_buffer)[(i * 4) + 3];
+			for (size_t i = 0; i < _gif->height * _gif->width; i++) {
+				_cbuf[i].red = _buffer[(i * BYTES_PER_PIXEL)];
+				_cbuf[i].green = _buffer[(i * BYTES_PER_PIXEL) + 1];
+				_cbuf[i].blue = _buffer[(i * BYTES_PER_PIXEL) + 2];
+				_cbuf[i].alpha = _buffer[(i * BYTES_PER_PIXEL) + 3];
 			};
 
-			// printf("%p %p\n", instance->_cbuf, instance->_convertbuf);
-			lv_canvas_set_buffer(instance->_canvas, instance->_convertbuf, gif->width, gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
-			// lv_canvas_copy_buf(instance->_canvas, instance->_convertbuf, instance->_sx, instance->_sy, gif->width, gif->height);
-			lv_obj_invalidate(instance->_canvas);
+			// lv_canvas_set_buffer(_canvas, _convertbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
+			// lv_canvas_copy_buf(_canvas, _convertbuf, _sx, _sy, _gif->width, _gif->height);
+			lv_obj_invalidate(_canvas);
 
-			int32_t delay = gif->gce.delay * 10;
-
+			int32_t delay = _gif->gce.delay * 10;
 			int32_t delta = pros::millis() - now;
 			delay -= delta;
 
 			if(delay > 0) pros::delay(delay);
 		}
 
-		if (looped == gif->loop_count) break;
-
-		gd_rewind(gif);
+		if (looped == _gif->loop_count) break;
+		gd_rewind(_gif);
 	}
 
-	//destruct object and free memory
-	instance->~Gif();
+	_cleanup();
 }
 
 
 void Gif::_render_task(void *arg) {
+	Gif *instance = static_cast<Gif*>(arg);
+
 	while(true) {
-		Gif::_render(arg);
+		instance->_render();
 		pros::delay(2);
 	}
 }

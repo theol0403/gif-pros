@@ -9,6 +9,8 @@
 extern "C" {
 #endif
 
+#define BYTES_PER_PIXEL 4
+
 typedef struct gd_Palette {
     int size;
     uint8_t colors[0x100 * 3];

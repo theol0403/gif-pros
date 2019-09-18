@@ -15,15 +15,16 @@ private:
   int    _sx;
   int    _sy;
   void   *_gifmem;
-  void   *_buffer;
+  uint8_t   *_buffer;
 
   lv_color_t *_cbuf;
-  lv_color_t *_convertbuf;
   lv_obj_t *_canvas;
 
   pros::task_t _task;
 
-  static void _render(void *arg);
+  void _cleanup();
+  void _render();
+
   static void _render_task(void *arg);
 
 };

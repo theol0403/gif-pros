@@ -12,8 +12,6 @@
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 
-#define BYTES_PER_PIXEL   4
-
 typedef struct Entry {
 	uint16_t length;
 	uint16_t prefix;
