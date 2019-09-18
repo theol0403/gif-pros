@@ -125,8 +125,6 @@ void Gif::_render() {
 void Gif::_render_task(void* arg) {
 	Gif* instance = static_cast<Gif*>(arg);
 
-	while(true) {
-		instance->_render();
-		pros::delay(2);
-	}
+	// exits when loop count exceeded
+	instance->_render();
 }
