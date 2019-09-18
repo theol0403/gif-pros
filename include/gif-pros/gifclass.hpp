@@ -7,18 +7,16 @@ class Gif {
 
 public:
 
-  Gif( const char *fname, lv_obj_t* parent, int sx, int sy );
+  Gif( const char *fname, lv_obj_t* parent);
   ~Gif();
 
 private:
-  gd_GIF *_gif;
-  int    _sx;
-  int    _sy;
-  void   *_gifmem;
-  uint8_t   *_buffer;
+  gd_GIF *_gif = nullptr;
+  void   *_gifmem = nullptr;
+  uint8_t   *_buffer = nullptr;
 
-  lv_color_t *_cbuf;
-  lv_obj_t *_canvas;
+  lv_color_t *_cbuf = nullptr;
+  lv_obj_t *_canvas = nullptr;
 
   pros::task_t _task;
 

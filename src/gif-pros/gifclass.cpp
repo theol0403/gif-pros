@@ -1,8 +1,6 @@
 #include "gifclass.hpp"
 
-Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
-	_sx = sx;
-	_sy = sy;
+Gif::Gif(const char *fname, lv_obj_t* parent) {
 	FILE *fp = fopen(fname, "rb");
 
 	if( fp != NULL ) {
@@ -36,8 +34,7 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 			_buffer = (uint8_t*)malloc(_gif->width * _gif->height * BYTES_PER_PIXEL);
 			if(_buffer == NULL) {
 				// out of memory
-				gd_close_gif(_gif);
-				free(_gifmem);
+				_cleanup();
 				std::cerr << "Gif::Gif - not enough memory for frame buffer" << std::endl;
 			} else {
 				_cbuf = new lv_color_t[_gif->width * _gif->height];
@@ -61,10 +58,10 @@ Gif::~Gif() {
 void Gif::_cleanup() {
 	pros::c::task_delete(_task);
 	lv_obj_del(_canvas);
-	delete[] _cbuf;
-	free(_buffer);
+	delete[] _cbuf; _cbuf = nullptr;
+	free(_buffer); _buffer = nullptr;
 	gd_close_gif( _gif );
-	free(_gifmem);
+	free(_gifmem); _gifmem = nullptr;
 }
 
 
