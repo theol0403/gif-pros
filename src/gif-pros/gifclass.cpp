@@ -80,7 +80,9 @@ void Gif::_render() {
 				_cbuf[i].red = _buffer[(i * BYTES_PER_PIXEL)];
 				_cbuf[i].green = _buffer[(i * BYTES_PER_PIXEL) + 1];
 				_cbuf[i].blue = _buffer[(i * BYTES_PER_PIXEL) + 2];
-				_cbuf[i].alpha = _buffer[(i * BYTES_PER_PIXEL) + 3];
+				uint8_t transperancy = _buffer[(i * BYTES_PER_PIXEL) + 3];
+				// transperancy = transperancy != 0 ? 255 : 0;
+				_cbuf[i].alpha = transperancy;
 			};
 
 			// lv_canvas_set_buffer(_canvas, _convertbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
