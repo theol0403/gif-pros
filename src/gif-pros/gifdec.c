@@ -268,9 +268,8 @@ get_key(gd_GIF *gif, int key_size, uint8_t *sub_len, uint8_t *shift, uint8_t *by
 		rpad = (*shift + bits_read) % 8;
 		if (rpad == 0) {
 			/* Update byte. */
-			if (*sub_len == 0)
-				fread( sub_len, 1, 1, gif->fp); /* Must be nonzero! */
-				fread( byte, 1, 1, gif->fp);
+			if (*sub_len == 0) fread( sub_len, 1, 1, gif->fp); /* Must be nonzero! */
+			fread( byte, 1, 1, gif->fp);
 			(*sub_len)--;
 		}
 		frag_size = MIN(key_size - bits_read, 8 - rpad);
@@ -315,7 +314,7 @@ read_image_data(gd_GIF *gif, int interlace)
 	uint16_t key, clear, stop;
 	int ret;
 	Table *table;
-	Entry entry;
+	Entry entry = (Entry) {0, 0, 0}; // prevent warning
 	off_t start, end;
 
 	fread( &byte, 1, 1, gif->fp);
@@ -459,11 +458,11 @@ gd_get_frame(gd_GIF *gif)
 	fread( &sep, 1, 1, gif->fp);
 	while (sep != ',') {
 		if (sep == ';')
-		return 0;
+			return 0;
 		if (sep == '!')
 			read_ext(gif);
 		else return -1;
-		fread( &sep, 1, 1, gif->fp);
+			fread( &sep, 1, 1, gif->fp);
 	}
 	if (read_image(gif) == -1)
 		return -1;

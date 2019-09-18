@@ -12,8 +12,7 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 		_gifmem = malloc(len);
 
 		if(_gifmem != NULL) {
-			int nRead = fread(_gifmem, 1, len, fp);
-			(void) nRead;
+			fread(_gifmem, 1, len, fp);
 		} else {
 			std::cerr << "Gif::Gif - not enough memory for GIF" << std::endl;
 		}
@@ -21,7 +20,7 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 
 		if(_gifmem != NULL) {
 			// create a FILE from memory buffer
-			FILE* memfp = fmemopen( _gifmem, len, "rb" );
+			FILE* memfp = fmemopen(_gifmem, len, "rb");
 
 			// open gof file
 			// will allocate memory for background and one animation frame.
@@ -61,7 +60,7 @@ void Gif::_cleanup() {
 	lv_obj_del(_canvas);
 	delete[] _cbuf; _cbuf = nullptr;
 	free(_buffer); _buffer = nullptr;
-	gd_close_gif( _gif );
+	gd_close_gif(_gif);
 	free(_gifmem); _gifmem = nullptr;
 }
 
