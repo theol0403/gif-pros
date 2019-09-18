@@ -33,7 +33,7 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 			}
 
 			// memory for rendering frame
-			_buffer = (uint8_t*)malloc(_gif->width * _gif->height * sizeof(uint8_t));
+			_buffer = (uint8_t*)malloc(_gif->width * _gif->height * sizeof(uint32_t));
 			if(_buffer == NULL) {
 				// out of memory
 				gd_close_gif(_gif);
@@ -57,7 +57,8 @@ Gif::Gif( const char *fname, lv_obj_t* parent, int sx, int sy ) {
 Gif::~Gif() {
 	pros::c::task_delete(_task);
 	lv_obj_del(_canvas);
-	delete[] _cbuf;
+	free(_convertbuf);
+	free(_cbuf);
 	free(_buffer);
 	gd_close_gif( _gif );
 	free(_gifmem);
@@ -80,14 +81,15 @@ void Gif::_render(void *arg ) {
 
 			gd_render_frame(gif, (uint8_t*)instance->_buffer);
 
-			for (int i = 0; i < gif->height * gif->width; i++) {
-				instance->_convertbuf[i].blue = ((uint8_t*)instance->_buffer)[(i * 4)];
+			for (size_t i = 0; i < gif->height * gif->width; i++) {
+				instance->_convertbuf[i].red = ((uint8_t*)instance->_buffer)[(i * 4)];
 				instance->_convertbuf[i].green = ((uint8_t*)instance->_buffer)[(i * 4) + 1];
-				instance->_convertbuf[i].red = ((uint8_t*)instance->_buffer)[(i * 4) + 2];
+				instance->_convertbuf[i].blue = ((uint8_t*)instance->_buffer)[(i * 4) + 2];
 				instance->_convertbuf[i].alpha = ((uint8_t*)instance->_buffer)[(i * 4) + 3];
 			};
 
-			// lv_canvas_set_buffer(instance->_canvas, instance->_convertbuf, gif->width, gif->height, LV_IMG_CF_TRUE_COLOR);
+			// printf("%p %p\n", instance->_cbuf, instance->_convertbuf);
+			lv_canvas_set_buffer(instance->_canvas, instance->_convertbuf, gif->width, gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
 			// lv_canvas_copy_buf(instance->_canvas, instance->_convertbuf, instance->_sx, instance->_sy, gif->width, gif->height);
 			lv_obj_invalidate(instance->_canvas);
 
