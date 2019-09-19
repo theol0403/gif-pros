@@ -1,6 +1,15 @@
 # gif-pros
-PROS port of jpearman's VEXcode GIF demo
-https://www.vexforum.com/t/animated-gif-demo-vexcode/58755
+PROS GIF decoder with LVGL integration and transparency support.
+
+![gif-pros](https://github.com/theol0403/gif-pros/raw/master/gif-pros.png)
+
+
+Loosely based on jpearman's [VEXcode GIF demo](https://www.vexforum.com/t/animated-gif-demo-vexcode/58755).
+Inspired by [VEXForum request](https://www.vexforum.com/t/gif-in-pros/66187?u=theol0403).
+Implements [`gifdec.c`](https://github.com/lecram/gifdec).
+
+gif-pros supports transparency and implements the LVGL canvas, which makes it extremely flexible and versatile.
+
 
 # Installation in external project
 ### Use pre-built template
