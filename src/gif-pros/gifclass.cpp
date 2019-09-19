@@ -1,5 +1,11 @@
 #include "gifclass.hpp"
 
+/**
+ * Construct the Gif class
+ * @param fname  the gif filename on the SD card (prefixed with /usd/)
+ * @param parent the LVGL parent object
+ * @param mode   the transparency mode
+ */
 Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 	_mode = mode;
 	FILE* fp = fopen(fname, "rb");
@@ -14,7 +20,7 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 		if(_gifmem != NULL) {
 			fread(_gifmem, 1, len, fp);
 		} else {
-			std::cerr << "Gif::Gif - not enough memory for GIF" << std::endl;
+			std::cerr << "Gif::Gif - not enough memory for gif file" << std::endl;
 		}
 		fclose(fp);
 
@@ -26,7 +32,7 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 			// will allocate memory for background and one animation frame.
 			_gif = gd_open_gif(memfp);
 			if(_gif == NULL) {
-				std::cerr << "Gif::Gif - unable to allocate memory for one animation" << std::endl;
+				std::cerr << "Gif::Gif - not enough memory to open gif" << std::endl;
 				return;
 			}
 
@@ -40,21 +46,26 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 				_cbuf = new lv_color_t[_gif->width * _gif->height];
 				_canvas = lv_canvas_create(parent, NULL);
 				lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
-				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, "GIF");
+				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, ("GIF - \"" + std::string(fname) + "\"").c_str());
 			}
 		}
 	} else {
-		std::cerr << "Gif::Gif - unable to open gif (file not found)" << std::endl;
+		std::cerr << "Gif::Gif - unable to open \"" + std::string(fname) + "\" (file not found)" << std::endl;
 	}
-
 };
 
 
+/**
+ * Destructs and cleans the Gif class
+ */
 Gif::~Gif() {
 	_cleanup();
 }
 
 
+/**
+ * Cleans and frees all allocated memory
+ */
 void Gif::_cleanup() {
 	pros::c::task_delete(_task);
 	lv_obj_del(_canvas);
@@ -65,9 +76,12 @@ void Gif::_cleanup() {
 }
 
 
+/**
+ * Render cycle, blocks until loop count exceeds gif loop count flag (if any)
+ */
 void Gif::_render() {
 
-	for (unsigned looped = 1;; looped++) {
+	for (size_t looped = 1;; looped++) {
 		while (gd_get_frame(_gif)) {
 			int32_t now = pros::millis();
 
@@ -105,7 +119,7 @@ void Gif::_render() {
 				_cbuf[i].alpha = transparency;
 			};
 
-			lv_obj_invalidate(_canvas);
+			lv_obj_invalidate(_canvas); // force canvas redraw
 
 			int32_t delay = _gif->gce.delay * 10;
 			int32_t delta = pros::millis() - now;
@@ -122,9 +136,11 @@ void Gif::_render() {
 }
 
 
+/**
+ * Calls _render()
+ * @param arg Gif*
+ */
 void Gif::_render_task(void* arg) {
 	Gif* instance = static_cast<Gif*>(arg);
-
-	// exits when loop count exceeded
 	instance->_render();
 }

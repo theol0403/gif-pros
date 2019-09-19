@@ -26,7 +26,7 @@ public:
   };
 
   /**
-   * Constructs the Gif class
+   * Construct the Gif class
    * @param fname  the gif filename on the SD card (prefixed with /usd/)
    * @param parent the LVGL parent object
    * @param mode   the transparency mode
@@ -57,7 +57,7 @@ private:
   void _cleanup();
 
   /**
-   * Render cycle, blocks until gif loop count exceeds gif file flag (if any)
+   * Render cycle, blocks until loop count exceeds gif loop count flag (if any)
    */
   void _render();
 
