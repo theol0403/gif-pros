@@ -20,6 +20,8 @@ Run `prosv5 c fetch <template>` to import the template into the CLI.
 #### 3. Apply template
 Run `prosv5 c apply gif-pros` in your destination project to install the package.
 
+**Note:** PROS kernel version 3.2.0 or higher is required.
+
 ## Standalone project
 You can also use this repository as a standalone project and run it directly on the robot.
 There is an example program in `src/opcontrol.cpp`.
