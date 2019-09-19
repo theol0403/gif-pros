@@ -1,7 +1,12 @@
 #pragma once
 #include "main.h"
-
 #include "gifdec.h"
+
+/**
+ * MIT License
+ * Copyright (c) 2019 Theo Lemay
+ * https://github.com/theol0403/gif-pros
+ */
 
 class Gif {
 
@@ -19,7 +24,7 @@ public:
    * There are four available transparency settings:
    */
   enum class Transparency {
-    automatic, // uses dynamic transparency mode only if transparency flag is set in the gif file
+    automatic, // (default) uses dynamic transparency mode only if transparency flag is set in the gif file
     dynamic,   // (force) enables dynamic transparency mode where transparency is range of 0-100%
     boolean,   // (force) enables boolean transparency mode where transparency is either 0% or 100%
     off        // disables transparency and uses gif background color, sometimes white

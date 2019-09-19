@@ -16,13 +16,7 @@
  */
 void opcontrol() {
 
-	lv_obj_t * obj1;
-	obj1 = lv_obj_create(lv_scr_act(), NULL);
-	lv_obj_set_size(obj1, 200, 200);
-	lv_obj_set_style(obj1, &lv_style_plain_color);
-	lv_obj_align(obj1, NULL, LV_ALIGN_CENTER, 0, 0);
-
-	Gif gif("/usd/earth.gif", obj1, Gif::Transparency::off);
+	Gif gif("/usd/mygif.gif", lv_scr_act(), Gif::Transparency::boolean);
 
 	while (true) {
 		pros::delay(20);
