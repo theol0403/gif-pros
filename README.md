@@ -11,16 +11,16 @@ Implements the [gifdec.c](https://github.com/lecram/gifdec) decoder.
 This library supports transparency and implements the LVGL canvas, making it extremely flexible and versatile to use.
 
 # Installation
-##### 1a. Pre-built template
+#### 1a. Pre-built template
 Download `gif-pros@<version>.zip`</a> from this repository.
-##### 1b. Build
+#### 1b. Build
 To build the template yourself instead of downloading, clone this repository and run `prosv5 make template`.
-##### 2. Fetch template
+#### 2. Fetch template
 Run `prosv5 c fetch <template>` to import the template into the CLI.
-##### 3. Apply template
+#### 3. Apply template
 Run `prosv5 c apply gif-pros` in your destination project to install the package.
 
-### Standalone project
+## Standalone project
 You can also use this repository as a standalone project and run it directly on the robot.
 There is an example program in `src/opcontrol.cpp`.
 
@@ -67,7 +67,7 @@ There are three transparency states:
    - `Gif::Transparency::boolean`: (force) enables boolean transparency mode where transparency is either 0% or 100%.
    - `Gif::Transparency::off`: disables transparency and uses gif background color, sometimes white.
 
-For best results, try `Gif::Transparency::boolean` if you want transparency, or `Gif::Transparency::off` if you want the GIF to be unaltered by transparency.
+For best results, try `Gif::Transparency::boolean` if you want a transparent background, or `Gif::Transparency::off` if the GIF relies on a background color.
 
 ### LVGL Integration
 To move, resize, or change the background color, create an [LVGL object](https://docs.littlevgl.com/en/html/object-types/obj.html) to contain the GIF:
@@ -82,7 +82,6 @@ Gif gif("/usd/mygif.gif", obj, Gif::Transparency::automatic);
 
 ### Final Notes
 To learn more about gif-pros, see the header file documentation in `/include/gifclass.hpp`.
-
 An example program is in `/src/opcontrol.cpp`.
 
 This library uses the MIT lisence, so feel free to use it in your programs as long as it credits this repository.
