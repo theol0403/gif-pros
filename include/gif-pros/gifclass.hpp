@@ -52,7 +52,7 @@ private:
   lv_color_t* _cbuf = nullptr; // canvas buffer
   lv_obj_t* _canvas = nullptr; // canvas object
 
-  pros::task_t _task; // render task
+  pros::task_t _task = nullptr; // render task
 
   Transparency _mode = Gif::Transparency::automatic; // transparency mode
 

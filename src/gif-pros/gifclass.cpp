@@ -38,7 +38,8 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 			// will allocate memory for background and one animation frame.
 			_gif = gd_open_gif(memfp);
 			if(_gif == NULL) {
-				std::cerr << "Gif::Gif - not enough memory to open gif" << std::endl;
+				std::cerr << "Gif::Gif - error opening \"" + std::string(fname) + "\"" << std::endl;
+				_cleanup();
 				return;
 			}
 
@@ -73,12 +74,13 @@ Gif::~Gif() {
  * Cleans and frees all allocated memory
  */
 void Gif::_cleanup() {
-	pros::c::task_delete(_task);
-	lv_obj_del(_canvas);
-	delete[] _cbuf; _cbuf = nullptr;
-	free(_buffer); _buffer = nullptr;
-	gd_close_gif(_gif);
-	free(_gifmem); _gifmem = nullptr;
+	if(_canvas) { lv_obj_del(_canvas); _canvas = nullptr; }
+	if(_cbuf) { delete[] _cbuf; _cbuf = nullptr; }
+	if(_buffer) { free(_buffer); _buffer = nullptr; }
+	if(_gif) { gd_close_gif(_gif); _gif = nullptr; }
+	if(_gifmem) { free(_gifmem); _gifmem = nullptr; }
+	// deleting task kills this thread
+	if(_task) { pros::c::task_delete(_task); _task = nullptr; }
 }
 
 
