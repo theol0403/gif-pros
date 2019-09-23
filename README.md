@@ -37,50 +37,38 @@ To initialize the GIF reader, run this command:
  * Construct the Gif class
  * @param fname  the gif filename on the SD card (prefixed with /usd/)
  * @param parent the LVGL parent object
- * @param mode   the transparency mode
  */
-Gif gif("/usd/mygif.gif", lv_scr_act(), Gif::Transparency::automatic);
+Gif gif("/usd/mygif.gif", lv_scr_act());
 ```
 
 **Note:** The `Gif` object cannot go out of scope or be destroyed. If you need the object to go out of scope, you can use `static` or dynamically create the object using `new`:
 ```cpp
 // this block can go out of scope
-static Gif gif("/usd/mygif.gif", lv_scr_act(), Gif::Transparency::automatic);
+static Gif gif("/usd/mygif.gif", lv_scr_act());
 // or
-Gif* gif = new Gif("/usd/mygif.gif", lv_scr_act(), Gif::Transparency::automatic); 
+Gif* gif = new Gif("/usd/mygif.gif", lv_scr_act()); 
 ```
-
-### Transparency
-The biggest feature of gif-pros is that it supports transparency.
-To allow the user to have the most flexibility, various transparency modes have been created.
-
-There are three transparency states:
-   - `automatic`: uses a flag in the gif file to deduce if the gif is transparent.
-   - `force`: forces transparancy regardless of the flag.
-   - `off`: does not use transparency and instead uses gif background color.
-   
- There are two tranparency modes:
-   - `dynamic`: uses a 0-255 transparency value for each pixel. May not work well with some images.
-   - `boolean`: uses either a 0 or 255 transparency value for each pixel. This makes the background transparent without touching the image pixels.
-   
- Thus, there are four available transparency settings:
-   - `Gif::Transparency::automatic`: (default) uses dynamic transparency mode only if transparency flag is set in the gif file.
-   - `Gif::Transparency::dynamic`: (force) enables dynamic transparency mode where transparency is range of 0-100%.
-   - `Gif::Transparency::boolean`: (force) enables boolean transparency mode where transparency is either 0% or 100%.
-   - `Gif::Transparency::off`: disables transparency and uses gif background color, sometimes white.
-
-For best results, try `Gif::Transparency::boolean` if you want a transparent background, or `Gif::Transparency::off` if the GIF relies on a background color.
 
 ### LVGL Integration
-To move, resize, or change the background color, create an [LVGL object](https://docs.littlevgl.com/en/html/object-types/obj.html) to contain the GIF:
+To move or resize the gif or to change the background color, create an [LVGL object](https://docs.littlevgl.com/en/html/object-types/obj.html) to manipulate the GIF:
 ```cpp
 lv_obj_t* obj = lv_obj_create(lv_scr_act(), NULL);
-lv_obj_set_size(obj, 200, 200);
-lv_obj_set_style(obj, &lv_style_plain_color);
+lv_obj_set_size(obj, 480, 240);
+lv_obj_set_style(obj, &lv_style_transp); // make the container invisible
 lv_obj_align(obj, NULL, LV_ALIGN_CENTER, 0, 0);
 
-Gif gif("/usd/mygif.gif", obj, Gif::Transparency::automatic);
+Gif gif("/usd/mygif.gif", obj);
 ```
+To change the background color or add borders to the GIF, simply edit the LVGL style.
+
+### Gif Settings
+Displaying GIFs is a fairly CPU-intensive operation. To increase preformance by making the file smaller, optimize the GIF by using this [online tool](https://ezgif.com/optimize/). If your gif only contains a few colors, make sure to optimize the color palate using the "Color Reduction" option.
+
+**Note:** gif-pros only works with GIFs that have global color tables. To add one, select the "Use single color table" option of the GIF optimizer.
+
+If you want the GIF to only loop once, use this [online tool](https://ezgif.com/loop-count/) to set the loop flag.
+
+[ezgif.com](https://ezgif.com/effects) also offers many other tools to resize or edit GIF animations, so be sure to check it out!
 
 ### Final Notes
 To learn more about gif-pros, see the header file documentation in `/include/gifclass.hpp`.

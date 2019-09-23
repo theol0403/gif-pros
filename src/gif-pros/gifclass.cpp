@@ -10,10 +10,8 @@
  * Construct the Gif class
  * @param fname  the gif filename on the SD card (prefixed with /usd/)
  * @param parent the LVGL parent object
- * @param mode   the transparency mode
  */
-Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
-	_mode = mode;
+Gif::Gif(const char* fname, lv_obj_t* parent) {
 	FILE* fp = fopen(fname, "rb");
 
 	if(fp != NULL) {

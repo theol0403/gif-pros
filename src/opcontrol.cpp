@@ -16,7 +16,7 @@
  */
 void opcontrol() {
 
-	Gif gif("/usd/mygif.gif", lv_scr_act(), Gif::Transparency::boolean);
+	Gif gif("/usd/mygif.gif", lv_scr_act());
 
 	while (true) {
 		pros::delay(20);
