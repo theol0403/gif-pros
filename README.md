@@ -12,7 +12,7 @@ This library supports transparency and implements the LVGL canvas, making it ext
 
 # Installation
 #### 1a. Pre-built template
-Download `gif-pros@<version>.zip`</a> from this repository.
+To get the template, head over to the [releases](https://github.com/theol0403/gif-pros/releases) page and download `gif-pros@<version>.zip`.
 #### 1b. Build
 To build the template yourself instead of downloading, clone this repository and run `prosv5 make template`.
 #### 2. Fetch template
