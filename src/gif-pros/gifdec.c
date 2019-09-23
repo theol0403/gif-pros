@@ -417,9 +417,17 @@ render_frame_rect(gd_GIF *gif, uint8_t *buffer)
 			index = gif->frame[(gif->fy + j) * gif->width + gif->fx + k];
 			color = &gif->palette->colors[index*3];
 			if (!gif->gce.transparency || index != gif->gce.tindex) {
-				memcpy(&buffer[(i+k)*BYTES_PER_PIXEL], color, BYTES_PER_PIXEL);
+				int offset = (i+k)*BYTES_PER_PIXEL;
+				buffer[offset+0] = *(color+0);
+				buffer[offset+1] = *(color+1);
+				buffer[offset+2] = *(color+2);
+				if(index == gif->bgindex && gif->gce.transparency) {
+					buffer[offset+3] = 0;
+				} else {
+					buffer[offset+3] = 255;
+				}
 			}
-		}
+		} 
 		i += gif->width;
 	}
 }

@@ -53,7 +53,7 @@ Gif::Gif(const char* fname, lv_obj_t* parent, Transparency mode) {
 				_cbuf = new lv_color_t[_gif->width * _gif->height];
 				_canvas = lv_canvas_create(parent, NULL);
 				lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
-				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-1, TASK_STACK_DEPTH_DEFAULT, ("GIF - \"" + std::string(fname) + "\"").c_str());
+				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-2, TASK_STACK_DEPTH_DEFAULT, ("GIF - \"" + std::string(fname) + "\"").c_str());
 			}
 		}
 	} else {
@@ -99,32 +99,7 @@ void Gif::_render() {
 				_cbuf[i].red = _buffer[(i * BYTES_PER_PIXEL)];
 				_cbuf[i].green = _buffer[(i * BYTES_PER_PIXEL) + 1];
 				_cbuf[i].blue = _buffer[(i * BYTES_PER_PIXEL) + 2];
-
-				uint8_t transparency = _buffer[(i * BYTES_PER_PIXEL) + 3];
-
-				switch(_mode) {
-					case Gif::Transparency::automatic: {
-						// if transparency is not enabled in gif, make all pixles non-transparent
-						transparency = !_gif->gce.transparency ? 255 : transparency;
-						break;
-					}
-					case Gif::Transparency::dynamic: {
-						// don't need to change anything
-						break;
-					}
-					case Gif::Transparency::boolean: {
-						// only fully-transparent pixels stay transparent
-						transparency = transparency != 0 ? 255 : 0;
-						break;
-					}
-					case Gif::Transparency::off: {
-						// make all pixles non-transparent
-						transparency = 255;
-						break;
-					}
-				}
-
-				_cbuf[i].alpha = transparency;
+				_cbuf[i].alpha = _buffer[(i * BYTES_PER_PIXEL) + 3];
 			};
 
 			lv_obj_invalidate(_canvas); // force canvas redraw
