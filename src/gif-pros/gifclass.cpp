@@ -67,6 +67,12 @@ Gif::~Gif() {
 	_cleanup();
 }
 
+/**
+* Deletes GIF and frees all allocated memory
+*/
+void Gif::clean() {
+	_cleanup();
+}
 
 /**
  * Cleans and frees all allocated memory

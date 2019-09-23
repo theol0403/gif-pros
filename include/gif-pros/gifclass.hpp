@@ -24,6 +24,11 @@ public:
    */
   ~Gif();
 
+  /**
+   * Deletes GIF and frees all allocated memory
+   */
+  void clean();
+
 private:
 
   gd_GIF* _gif = nullptr; // gif decoder object

@@ -70,6 +70,14 @@ If you want the GIF to only loop once, use this [online tool](https://ezgif.com/
 
 [ezgif.com](https://ezgif.com/effects) also offers many other tools to resize or edit GIF animations, so be sure to check it out!
 
+### Removing GIFs
+GIFs take a lot of memory, so it is important to delete them when not in use. They will automatically self-delete if the loop count (if any) has been reached, or if the Gif object is destructed, but otherwise the GIF will loop forever.
+To delete the GIF and free the memory, call:
+```cpp
+gif.clean();
+```
+**Note:** Currently, to re-open the GIF you need to create a new object. I might implement a feature that lets you open and close without re-creating the object.
+
 ### Final Notes
 To learn more about gif-pros, see the header file documentation in `/include/gifclass.hpp`.
 An example program is in `/src/opcontrol.cpp`.
