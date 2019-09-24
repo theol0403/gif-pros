@@ -29,7 +29,7 @@ There is an example program in `src/opcontrol.cpp`.
 # Use
 After you have installed gif-pros into your project, include the header:
 ```cpp
-#include "gif-pros/gifclass.h"
+#include "gif-pros/gifclass.hpp"
 ```
 To initialize the GIF reader, run this command:
 ```cpp
