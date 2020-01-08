@@ -68,6 +68,20 @@ Gif::~Gif() {
 }
 
 /**
+ * Pauses the GIF task
+ */
+void Gif::pause(){
+	pros::c::task_suspend(_task);
+}
+
+/**
+ * Resumes the GIF task
+ */
+void Gif::resume(){
+	pros::c::task_resume(_task);
+}
+
+/**
 * Deletes GIF and frees all allocated memory
 */
 void Gif::clean() {
