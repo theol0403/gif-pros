@@ -16,19 +16,7 @@
  */
 void opcontrol() {
 
-	lv_obj_t* cont = lv_cont_create(lv_scr_act(), NULL);
-
-	lv_obj_set_size(cont, 240, 240);
-
-	Gif gif("/usd/EZ/EZlogo.gif", cont);
-
-	pros::delay(5000);
-
-	gif.pause();
-
-	pros::delay(5000);
-
-	gif.resume();
+	Gif gif("/usd/mygif.gif", lv_scr_act());
 
 	while (true) {
 		pros::delay(20);
