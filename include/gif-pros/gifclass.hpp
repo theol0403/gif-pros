@@ -25,6 +25,16 @@ public:
   ~Gif();
 
   /**
+   * Pauses the GIF task
+   */
+  void pause();
+
+  /**
+   * Resumes the GIF task
+   */
+  void resume();
+
+  /**
    * Deletes GIF and frees all allocated memory
    */
   void clean();
