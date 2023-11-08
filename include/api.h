@@ -8,7 +8,7 @@
  * This file should not be modified by users, since it gets replaced whenever
  * a kernel upgrade occurs.
  *
- * Copyright (c) 2017-2019, Purdue University ACM SIGBots.
+ * \copyright Copyright (c) 2017-2023, Purdue University ACM SIGBots.
  * All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -39,28 +39,45 @@
 #include <unistd.h>
 #endif /* __cplusplus */
 
-#define PROS_VERSION_MAJOR 3
-#define PROS_VERSION_MINOR 2
-#define PROS_VERSION_PATCH 0
-#define PROS_VERSION_STRING "3.2.0"
-
-#define PROS_ERR (INT32_MAX)
-#define PROS_ERR_F (INFINITY)
+#define PROS_VERSION_MAJOR 4
+#define PROS_VERSION_MINOR 0
+#define PROS_VERSION_PATCH 6
+#define PROS_VERSION_STRING "4.0.6"
 
 #include "pros/adi.h"
 #include "pros/colors.h"
+#include "pros/device.h"
+#include "pros/distance.h"
+#include "pros/error.h"
+#include "pros/ext_adi.h"
+#include "pros/gps.h"
+#include "pros/imu.h"
+#include "pros/link.h"
 #include "pros/llemu.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
+#include "pros/optical.h"
+#include "pros/rotation.h"
 #include "pros/rtos.h"
+#include "pros/screen.h"
 #include "pros/vision.h"
 
 #ifdef __cplusplus
 #include "pros/adi.hpp"
+#include "pros/colors.hpp"
+#include "pros/device.hpp"
+#include "pros/distance.hpp"
+#include "pros/gps.hpp"
+#include "pros/imu.hpp"
+#include "pros/link.hpp"
 #include "pros/llemu.hpp"
 #include "pros/misc.hpp"
+#include "pros/motor_group.hpp"
 #include "pros/motors.hpp"
+#include "pros/optical.hpp"
+#include "pros/rotation.hpp"
 #include "pros/rtos.hpp"
+#include "pros/screen.hpp"
 #include "pros/vision.hpp"
 #endif
 
