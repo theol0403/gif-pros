@@ -13,18 +13,19 @@ This library supports transparency and implements the LVGL canvas, making it ext
 # Installation
 #### 1a. Pre-built template
 To get the template, head over to the [releases](https://github.com/theol0403/gif-pros/releases) page and download `gif-pros@<version>.zip`.
+**Note:** If you are still using PROS 3, download version 2.1.1. If you are using PROS 4 with LVGL 8.3, download version 3 or higher.
 #### 1b. Build
-To build the template yourself instead of downloading, clone this repository and run `prosv5 make template`.
+To build the template yourself instead of downloading, clone this repository and run `pros make template`.
 #### 2. Fetch template
-Run `prosv5 c fetch <template>` to import the template into the CLI.
+Run `pros c fetch <template>` to import the template into the CLI.
 #### 3. Apply template
-Run `prosv5 c apply gif-pros` in your destination project to install the package.
+Run `pros c apply gif-pros` in your destination project to install the package.
 
 **Note:** PROS kernel version 3.2.0 or higher is required.
 
 ## Standalone project
 You can also use this repository as a standalone project and run it directly on the robot.
-There is an example program in `src/opcontrol.cpp`.
+There is an example program in `src/main.cpp`.
 
 # Use
 After you have installed gif-pros into your project, include the header:
@@ -80,6 +81,6 @@ gif.clean();
 
 ### Final Notes
 To learn more about gif-pros, see the header file documentation in `/include/gifclass.hpp`.
-An example program is in `/src/opcontrol.cpp`.
+An example program is in `/src/main.cpp`.
 
 This library uses the MIT lisence, so feel free to use it in your programs as long as it credits this repository.

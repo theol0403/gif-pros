@@ -49,7 +49,7 @@ Gif::Gif(const char* fname, lv_obj_t* parent) {
 				std::cerr << "Gif::Gif - not enough memory for frame buffer" << std::endl;
 			} else {
 				_cbuf = new lv_color_t[_gif->width * _gif->height];
-				_canvas = lv_canvas_create(parent, NULL);
+				_canvas = lv_canvas_create(parent);
 				lv_canvas_set_buffer(_canvas, _cbuf, _gif->width, _gif->height, LV_IMG_CF_TRUE_COLOR_ALPHA);
 				_task = pros::c::task_create(_render_task, static_cast<void*>(this), TASK_PRIORITY_DEFAULT-2, TASK_STACK_DEPTH_DEFAULT, ("GIF - \"" + std::string(fname) + "\"").c_str());
 			}
@@ -114,10 +114,10 @@ void Gif::_render() {
 			gd_render_frame(_gif, _buffer);
 
 			for (size_t i = 0; i < _gif->height * _gif->width; i++) {
-				_cbuf[i].red = _buffer[(i * BYTES_PER_PIXEL)];
-				_cbuf[i].green = _buffer[(i * BYTES_PER_PIXEL) + 1];
-				_cbuf[i].blue = _buffer[(i * BYTES_PER_PIXEL) + 2];
-				_cbuf[i].alpha = _buffer[(i * BYTES_PER_PIXEL) + 3];
+				_cbuf[i].ch.red = _buffer[(i * BYTES_PER_PIXEL)];
+				_cbuf[i].ch.green = _buffer[(i * BYTES_PER_PIXEL) + 1];
+				_cbuf[i].ch.blue = _buffer[(i * BYTES_PER_PIXEL) + 2];
+				_cbuf[i].ch.alpha = _buffer[(i * BYTES_PER_PIXEL) + 3];
 			};
 
 			lv_obj_invalidate(_canvas); // force canvas redraw
