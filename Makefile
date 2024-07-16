@@ -23,7 +23,7 @@ USE_PACKAGE:=1
 IS_LIBRARY:=1
 # TODO: CHANGE THIS!
 LIBNAME:=gif-pros
-VERSION:=3.0.0
+VERSION:=3.0.1
 # EXCLUDE_SRC_FROM_LIB= $(SRCDIR)/unpublishedfile.c
 # this line excludes opcontrol.c and similar files
 EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/opcontrol $(SRCDIR)/initialize $(SRCDIR)/autonomous,$(foreach cext,$(CEXTS),$(file).$(cext)) $(foreach cxxext,$(CXXEXTS),$(file).$(cxxext)))
